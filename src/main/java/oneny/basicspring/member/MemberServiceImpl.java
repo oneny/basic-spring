@@ -2,12 +2,21 @@ package oneny.basicspring.member;
 
 public class MemberServiceImpl implements MemberService {
 
-  // 다른 저장소로 변경할 때 OCP 원칙을 잘 준수하고 있을까?
-  // DIP를 잘 지키고 있을까?
-  // 의존관계가 인터페이스 뿐만 아니라 구현까지 모두 의존하는 문제점이 있음
-  // MemberServiceImple이 MemoryRepository(인터페이스)와 MemoryMemberRepository(구현)까지 모두 의존하고 있다.
-  // 변경했을 때 문제가 될 수 있다. 한 마디로 DIP를 위반하고 있음.
-  private final MemberRepository memberRepository = new MemoryMemberRepository();
+  private final MemberRepository memberRepository;
+
+  // WrongMemberServiceImpl과 달리 해당 파일에 MemoryMemberRepository에 대한 코드가 있나?
+  // 없음. 오직 MemberRepository에 대한 인터페이스만 존재한다.
+  // 이제 MemberServiceImple은 추상화(인터페이스)에만 의존하게 된다. -> DIP를 지키고 있음
+
+  // 자세한 설명
+  // 설계 변경으로 MemberServiceImpl은 MemboryMeberRepository를 의존하지 않는다.
+  // 단지 MemberRepository 인터페이스에만 의존한다.
+  // MemberServiceImpl의 입장에서 생성자를 통해 어떤 구현 객체가 들어올지(주입될지)는 알 수 없다.
+  // MemberServiceImpl의 생성자를 통해서 어떤 구현 객체를 주입할지는 오직 외부(AppConfig)에서 결정된다.
+  // MemberServiceImpl은 이제부터 "의존관계에 대한 고민은 외부"에 맡기고 "실행에만 집중"하면 된다.
+  public MemberServiceImpl(MemberRepository memberRepository) {
+    this.memberRepository = memberRepository;
+  }
 
   @Override
   public void join(Member member) {

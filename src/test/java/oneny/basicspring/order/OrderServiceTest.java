@@ -1,16 +1,24 @@
 package oneny.basicspring.order;
 
+import oneny.basicspring.NoSpringAppConfig;
 import oneny.basicspring.member.Grade;
 import oneny.basicspring.member.Member;
 import oneny.basicspring.member.MemberService;
-import oneny.basicspring.member.MemberServiceImpl;
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 public class OrderServiceTest {
 
-  MemberService memberService = new MemberServiceImpl();
-  OrderService orderService = new OrderServiceImpl();
+  MemberService memberService;
+  OrderService orderService;
+
+  @BeforeEach
+  public void setUp() {
+    NoSpringAppConfig appConfig = new NoSpringAppConfig();
+    memberService = appConfig.memberService();
+    orderService = appConfig.orderService();
+  }
 
   @Test
   void createOrder() {
