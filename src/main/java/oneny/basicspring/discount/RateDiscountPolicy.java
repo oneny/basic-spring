@@ -1,11 +1,13 @@
 package oneny.basicspring.discount;
 
+import oneny.basicspring.annotation.MainDiscountPolicy;
 import oneny.basicspring.member.Grade;
 import oneny.basicspring.member.Member;
 import org.springframework.stereotype.Component;
 
 
 @Component
+@MainDiscountPolicy
 public class RateDiscountPolicy implements DiscountPolicy {
 
   private static final int discountPrice = 10;
