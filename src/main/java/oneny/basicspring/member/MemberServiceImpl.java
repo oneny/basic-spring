@@ -1,5 +1,9 @@
 package oneny.basicspring.member;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+@Component
 public class MemberServiceImpl implements MemberService {
 
   private final MemberRepository memberRepository;
@@ -14,6 +18,7 @@ public class MemberServiceImpl implements MemberService {
   // MemberServiceImpl의 입장에서 생성자를 통해 어떤 구현 객체가 들어올지(주입될지)는 알 수 없다.
   // MemberServiceImpl의 생성자를 통해서 어떤 구현 객체를 주입할지는 오직 외부(AppConfig)에서 결정된다.
   // MemberServiceImpl은 이제부터 "의존관계에 대한 고민은 외부"에 맡기고 "실행에만 집중"하면 된다.
+  @Autowired // 자동으로 ac.getBean(MemberRepository.class)로 의존관계를 자동으로 주입해준다고 보면 된다.
   public MemberServiceImpl(MemberRepository memberRepository) {
     this.memberRepository = memberRepository;
   }

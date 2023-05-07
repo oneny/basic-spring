@@ -129,3 +129,53 @@ public MemberRepository memberRepository() {
 - 순수한 클래스 `class oneny.basicspring.AppConfig`가 반환되어 출력된다.
 - `@Configuration`을 적용하지 않고 `@Bean`만 적용해도 스프링 빈으로 등록되지만, 싱글톤을 보장하지 않는다.
 - 크게 고민할 것없이 스프링 설정 정보는 항상 `@Configuration`을 사용하자.
+
+
+### 컴포넌트 스캔과 자동 의존관계 주입 동작 방식
+
+#### @ComponentScan
+
+```java
+@Component
+public class MemberServiceImpl implements MemberService {}
+```
+
+- `@ComponentScan`은 `@Component`가 붙은 모든 클래스를 스프링 빈으로 등록한다.
+- 이때 스프링 빈의 기본 이름은 클래스명을 사용하되 맨 앞글자만 소문자를 사용한다.
+  - 빈 이름 기본 전략: MemberServiceImpl 클래스 -> memberServiceImpl
+  - 빈 이름 직접 지정: 만약 스프링 빈의 이름을 직접 지정하고 싶으면 @Component("memberService2") 이런식으로 이름을 부여하면 된다.
+
+#### @Autowired
+
+```java
+@Component
+public class MemberServiceImpl implements MemberService {
+
+  private final MemberRepository memberRepository;
+
+  @Autowired // 자동으로 ac.getBean(MemberRepository.class)로 의존관계를 자동으로 주입해준다고 보면 된다.
+  public MemberServiceImpl(MemberRepository memberRepository) {
+    this.memberRepository = memberRepository;
+  }
+  
+  // ...
+}
+```
+
+- 생성자에 `@Autowired`를 지정하면, 스프링 컨테이너가 자동으로 해당 스프링 빈을 찾아서 주입한다.
+- 이때 기본 조회 전략은 타입이 같은 빈을 찾아서 주입한다.
+  - `getBean(MemberRepository.class)`와 동일하다고 이해하면 된다.
+
+#### 컴포넌트 스캔 대상
+
+- 컴포넌트의 스캔의 용도 뿐만 아니라 다음 어노테이션이 있으면 스프링은 부가 기능을 수행한다.
+  - `@Compnent`: 컴포넌트 스캔에서 사용
+  - `@Controller`: 스프링 MVC 컨트롤러에서 사용
+    - 스프링 MVC 컨트롤러로 인식
+  - `@Service`: 스프링 비즈니스 로직에서 사용
+    - 특별한 처리는 하지 않지만, 대신 개발자들이 핵심 비즈니스 로직이 여기에 있겠구나라고 비즈니스 게층을 인식하는데 도움이 된다.
+  - `@Repository`: 스프링 데이터 접근 계층에서 사용
+    - 스프링 데이터 접근 계층으로 인식하고, 데이터 계층의 예외를 스프링 예외로 변환해준다.
+  - `@Configuration`: 스프링 설정 정보에서 사용
+    - 앞에서 보았듯이 스프링 설정 정보로 인식하고, 스프링 빈이 싱글톤을 유지하도록 추가 처리를 한다.
+- `@Controller`, `@Service` 등의 내부 소스코드를 살펴보면 `@Component` 어노테이션이 적용되어 있는 것을 확인할 수 있다.

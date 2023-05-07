@@ -2,10 +2,13 @@ package oneny.basicspring.discount;
 
 import oneny.basicspring.member.Grade;
 import oneny.basicspring.member.Member;
+import org.springframework.stereotype.Component;
 
+
+@Component
 public class RateDiscountPolicy implements DiscountPolicy {
 
-  private int discountPrice = 10;
+  private static final int discountPrice = 10;
 
   @Override
   public int discount(Member member, int price) {
