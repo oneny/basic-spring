@@ -1,8 +1,5 @@
 package oneny.basicspring;
 
-import oneny.basicspring.member.MemberRepository;
-import oneny.basicspring.member.MemoryMemberRepository;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.FilterType;
@@ -22,9 +19,9 @@ public class AutoAppConfig {
 
   // 자동 빈 등록 vs 자동 빈 등록 -> ConflictingBeanDefinitionException 예외 발생
   // 자동 빈 등록 vs 수동 빈 등록 -> 자동 빈 등록이 우선권을 가진다.(수동 빈이 자동 빈을 오버라이딩 해버린다.)
-    // Overriding bean definition for bean 'memoryMemberRepository' with a different definition: replacing
+  // Overriding bean definition for bean 'memoryMemberRepository' with a different definition: replacing
   // 최근 스프링 부트에서는 수동 빈 등록과 자동 빈 등록이 충돌나면 오류가 발생하도록 기본값을 바꾸었다.
-    // 여러 설정들이 꼬여서 정말 잡기 어려운 버그가 발생할 수 있기 때문이다.
+  // 여러 설정들이 꼬여서 정말 잡기 어려운 버그가 발생할 수 있기 때문이다.
 //  @Bean(name = "memoryMemberRepository")
 //  public MemberRepository memberRepository() {
 //    return new MemoryMemberRepository();
